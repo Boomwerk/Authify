@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\DTO\DTORegister;
 use App\Repository\UserRepository;
 use App\Service\AuthService;
+use App\Service\RegisterService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,9 +42,9 @@ final class AppController extends AbstractController
 
         try{
 
-            $auth = new AuthService($this->repo);
+            $register = new RegisterService($this->repo);
 
-            $user = $auth->register($dto->email,$dto->password);
+            $user = $register->register($dto->email,$dto->password);
         
             $em->persist($user);
             $em->flush(); 
