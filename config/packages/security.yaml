@@ -12,23 +12,25 @@ security:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
-        main:
-            lazy: true
-            provider: users_in_memory
-        
+       
         login:
-            pattern: ^/auth
+            pattern: ^/auth-check
             stateless: true
             json_login:
-                check_path: /auth
+                check_path: /auth-check
+                username_path: email
+                password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         api:
-            pattern:   ^/api
+            pattern:   ^/
             stateless: true
             jwt: ~
-
+        
+        main:
+            lazy: true
+            provider: users_in_memory
             # Activate different ways to authenticate:
             # https://symfony.com/doc/current/security.html#the-firewall
 

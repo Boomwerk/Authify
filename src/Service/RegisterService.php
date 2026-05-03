@@ -18,9 +18,11 @@ class RegisterService
             throw new \InvalidArgumentException("L'email existe déjà, veuillez vous connecter");
         }
 
+
+        
         $user = new User();
         $user->setEmail($email);
-        $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
+        $user->setPassword($password);
 
  
         return $user;
