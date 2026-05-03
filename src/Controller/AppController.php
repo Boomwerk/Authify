@@ -105,5 +105,14 @@ final class AppController extends AbstractController
     }
 
 
+    #[Route("/private", name:"private")]
+    public function private(#[CurrentUser] User $user):Response
+    {
+        
+
+        return $this->json(["message" => "welcome". $user->getEmail()]);
+    }
+
+
    
 }

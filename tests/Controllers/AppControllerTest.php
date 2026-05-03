@@ -107,7 +107,7 @@ class AppControllerTest extends WebTestCase
 
         $client->request('POST', "/auth", $data,[],["CONTENT-TYPE" => "multipart/form-data"]);
 
-        $this->assertResponseStatusCodeSame(405);
+        $this->assertResponseStatusCodeSame(401);
 
     }
 
