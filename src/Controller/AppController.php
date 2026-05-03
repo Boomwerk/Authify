@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\DTOAuth;
 use App\DTO\DTORegister;
 use App\Repository\UserRepository;
 use App\Service\AuthService;
@@ -48,6 +49,7 @@ final class AppController extends AbstractController
         
             $em->persist($user);
             $em->flush(); 
+
             return $this->json(["Message" => "Enregistrement réussi"],201);
 
         }catch(\Exception $e){
@@ -59,7 +61,7 @@ final class AppController extends AbstractController
 
 
     #[Route('/auth', name: 'auth', methods:["POST"])]
-    public function login(Request $request)
+    public function login(Request $request, ValidatorInterface $validate)
     {
 
         if(!$request->headers->contains("Content-Type", "application/json")){
@@ -69,8 +71,34 @@ final class AppController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        
+        $dto = new DTOAuth();
+
+        $dto->email = $data->email ?? "";
+        $dto->password = $data->password ?? "";
+
+        $errors= $validate->validate($dto);
+
+        if($errors->count() > 0)
+        {
+            return $this->json(["message" => (string) $errors]);
+        }
+
+
+        try{
+
+            $auth = new AuthService($this->repo);
+
+            return $auth->auth($dto->email, $dto->password);
+
+
+        }catch(\Exception $e){
+            return $this->json(["Message" => $e->getmessage() ]);
+        }
+
+
 
 
     }
+
+   
 }

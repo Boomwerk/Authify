@@ -35,7 +35,7 @@ class UserRepository extends ServiceEntityRepository
         ->andWhere('u.email = :mail')
         ->setParameter('mail', $email)
         ->getQuery()
-        ->getResult()
+        ->getOneOrNullResult()
         ;
 
     }

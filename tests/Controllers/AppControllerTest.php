@@ -50,6 +50,7 @@ class AppControllerTest extends WebTestCase
     }
 
     public function testCanRegister(){
+        
 
         $client = static::createClient();
 
