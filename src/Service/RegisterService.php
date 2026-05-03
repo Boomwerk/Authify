@@ -4,10 +4,11 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegisterService
 {
-    public function __construct(private UserRepository $repo)
+    public function __construct(private UserRepository $repo, private UserPasswordHasherInterface $hasher)
     {}
     
     public function register(string $email, string $password)
@@ -22,7 +23,13 @@ class RegisterService
         
         $user = new User();
         $user->setEmail($email);
-        $user->setPassword($password);
+
+        $hashed = $this->hasher->hashPassword($user, $password);
+
+       
+        $user->setPassword($hashed);
+
+       
 
  
         return $user;

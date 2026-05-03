@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\DTO\DTOAuth;
 use App\DTO\DTORegister;
+use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\AuthService;
 use App\Service\RegisterService;
@@ -11,12 +12,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class AppController extends AbstractController
 {
-    public function __construct(private UserRepository $repo){}
+    public function __construct(private UserRepository $repo, private UserPasswordHasherInterface $hasher){}
 
     #[Route('/register', name: 'register', methods:["POST"])]
     public function register(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): JsonResponse
@@ -43,7 +47,7 @@ final class AppController extends AbstractController
 
         try{
 
-            $register = new RegisterService($this->repo);
+            $register = new RegisterService($this->repo, $this->hasher);
 
             $user = $register->register($dto->email,$dto->password);
         
@@ -99,6 +103,7 @@ final class AppController extends AbstractController
 
 
     }
+
 
    
 }

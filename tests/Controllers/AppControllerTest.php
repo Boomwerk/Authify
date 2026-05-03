@@ -54,9 +54,9 @@ class AppControllerTest extends WebTestCase
 
         $client = static::createClient();
 
-        $client->jsonRequest(
+        $response = $client->jsonRequest(
             'POST', 
-            "/register",
+            "http://localhost:8000/register",
             [
                 'email' => 'user@test.com',
                 'password' => 'Password123'
@@ -64,16 +64,12 @@ class AppControllerTest extends WebTestCase
         );
 
 
-        $this->assertResponseStatusCodeSame(201); 
-
+        $this->assertResponseStatusCodeSame(201);
 
         $this->reset();
 
 
     }
-
-    
-    
 
     
 
